@@ -1,0 +1,68 @@
+#version 330 core
+
+const vec3 LR = vec3(0.0, 0.0, 1.0);
+const vec3 UD = vec3(0.0, 1.0, 0.0);
+
+
+// Input vertex data, different for all executions of this shader.
+layout(location = 0) in vec3 vertexPosition_modelspace;
+layout(location = 1) in vec2 vertexTextureUV;
+layout(location = 2) in vec3 vertexNormal_modelspace;
+layout(location = 3) in vec3 primitivePosition_worldspace;
+
+// Output data ; will be interpolated for each fragment.
+out vec2 UV;
+out vec3 Position_worldspace;
+out vec3 EyeDir_cameraspace;
+out vec3 Normal_cameraspace;
+out vec3 LightDir_cameraspace;
+
+out vec3 LightDir_tangentspace;
+out vec3 EyeDir_tangentspace;
+
+out vec3 fragmentLight;
+
+// Values that stay constant for the whole mesh.
+uniform mat4 MVP;
+uniform mat4 V;
+uniform mat4 M;
+
+uniform vec3 lightDirection;
+uniform vec3 skyColor;
+uniform vec3 groundColor;
+
+uniform vec3 shift;
+
+const vec3 lightPosition_worldspace = vec3(100500, 100500, 0);
+
+void main(){	
+	vec4 vertexPosition_worldspace = vec4(vertexPosition_modelspace + primitivePosition_worldspace + shift,1);
+
+	// Output position of the vertex, in clip space : MVP * position
+	gl_Position = MVP * vertexPosition_worldspace;
+
+	UV = vertexTextureUV;
+	
+	Position_worldspace = (M * vertexPosition_worldspace).xyz;
+	
+	vec3 vertexPosition_cameraspace = (V * M * vertexPosition_worldspace).xyz;
+	EyeDir_cameraspace = vec3(0.0, 0.0, 0.0) - vertexPosition_cameraspace;
+	
+	vec3 lightPosition_cameraspace = (V * vec4(lightPosition_worldspace,1)).xyz;
+	LightDir_cameraspace = lightPosition_cameraspace + EyeDir_cameraspace;
+	
+	//mat3 mv = mat3(V * M);
+	
+	Normal_cameraspace = ( V * M * vec4(vertexNormal_modelspace,0)).xyz;
+	
+	
+	
+	
+	vec3 tnorm = vertexNormal_modelspace;
+	
+	float costheta = dot(tnorm, normalize(lightPosition_worldspace));
+	float a = costheta * 0.5 + 0.5;
+	
+	fragmentLight = mix(groundColor, skyColor, a); 
+}
+

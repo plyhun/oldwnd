@@ -1,0 +1,13 @@
+{
+	"Name": "Cobblestone",	
+	"Sizes": [0, 1, 2],
+	"Transparency": 0,
+	"Hardness": 50,
+	"Fluidity": 0,
+	"EntityHealthInfluence": 0,
+	"Slipperiness": 0,
+	"Mass": 100,
+	"LightEmission": 0,
+	"Orientable": false,
+	"Slopeable": true
+}

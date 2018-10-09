@@ -1,0 +1,13 @@
+{
+	"Name": "Grass",	
+	"Sizes": [0,1,2],
+	"Transparency": 0,
+	"Hardness": 10,
+	"Fluidity": 0,
+	"EntityHealthInfluence": 0,
+	"Slipperiness": 0,
+	"Mass": 150,
+	"LightEmission": 0,
+	"Orientable": false,
+	"Slopeable": false
+}
